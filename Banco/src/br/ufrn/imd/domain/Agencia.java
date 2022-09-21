@@ -11,10 +11,9 @@ public class Agencia {
 	
 	public Agencia() {}
 	
-	public Agencia(String descricao, String endereco, Banco banco) {
+	public Agencia(String descricao, Banco banco) {
 		super();
 		this.descricao = descricao;
-		this.endereco = endereco;
 		this.banco = banco;
 	}
 

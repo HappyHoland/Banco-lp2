@@ -1,48 +1,46 @@
 package br.ufrn.imd.domain;
 
+import java.time.LocalDate;
+import java.util.Objects;
+
 public class Transacao {
 	
-	enum Type {
-		IN,
-		OUT
-	}
-	
 	private int id;
-	private Cliente user;
-	private Cliente other;
-	private Type type;
+	private Cliente from;
+	private Cliente to;
 	private double valor;
+	private LocalDate data;
 	
 	public Transacao() {}
 	
-	public Transacao(Cliente user, Cliente other, double valor, Type type) {
-		this.user = user;
-		this.user = user;
-		this.type = type;
+	public Transacao(Cliente from, Cliente to, double valor, LocalDate data) {
+		this.from = from;
+		this.from = from;
+		this.data = data;
 	}
 
-	public Cliente getUser() {
-		return user;
+	public Cliente getFrom() {
+		return from;
 	}
 
-	public void setUser(Cliente user) {
-		this.user = user;
+	public void setFrom(Cliente from) {
+		this.from = from;
 	}
 
-	public Cliente getOther() {
-		return other;
+	public Cliente getTo() {
+		return to;
 	}
 
-	public void setOther(Cliente other) {
-		this.other = other;
+	public void setTo(Cliente to) {
+		this.to = to;
 	}
 
-	public Type getType() {
-		return type;
+	public LocalDate getData() {
+		return data;
 	}
 
-	public void setType(Type type) {
-		this.type = type;
+	public void setData(LocalDate data) {
+		this.data = data;
 	}
 
 	public double getValor() {
@@ -60,6 +58,22 @@ public class Transacao {
 	public void setId(int id) {
 		this.id = id;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Transacao other = (Transacao) obj;
+		return id == other.id;
+	}
 	
 }

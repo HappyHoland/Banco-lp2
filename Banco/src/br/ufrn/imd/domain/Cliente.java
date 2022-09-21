@@ -2,31 +2,26 @@ package br.ufrn.imd.domain;
 
 import java.util.List;
 import java.util.Objects;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Cliente extends Pessoa {
 	
 	private int id;
 	private String conta;
-	private String tipo;
+	private String senha;
 	private Agencia agencia;
 	private double saldo;
-	private double fatura;
-	private List <Transacao> transacoes;
 	
-	public Cliente() {
-		transacoes = new ArrayList <Transacao>();
-	}
+	public Cliente() {}
 	
-	public Cliente(int id, String nome, String cpf, String conta, String tipo) {
+	public Cliente(int id, String nome, String cpf, String endereco, String conta, String senha) {
+		super(nome, cpf, endereco);
 		this.id = id;
-		setNome(nome);
-		setCpf(cpf);
 		this.conta = conta;
-		this.tipo = tipo;
+		this.senha = senha;
 		this.saldo = 0.0;
-		this.fatura = 0.0;
-		transacoes = new ArrayList <Transacao>();
 	}
 
 	public double getSaldo() {
@@ -45,22 +40,6 @@ public class Cliente extends Pessoa {
 		this.id = id;
 	}
 
-	public double getFatura() {
-		return fatura;
-	}
-
-	public void setFatura(double fatura) {
-		this.fatura = fatura;
-	}
-	
-	public List<Transacao> getTransacoes() {
-		return transacoes;
-	}
-
-	public void setTransacoes(List<Transacao> transacoes) {
-		this.transacoes = transacoes;
-	}
-
 	public String getConta() {
 		return conta;
 	}
@@ -77,12 +56,12 @@ public class Cliente extends Pessoa {
 		this.agencia = agencia;
 	}
 
-	public String getTipo() {
-		return tipo;
+	public String getSenha() {
+		return senha;
 	}
 
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	@Override
@@ -90,29 +69,19 @@ public class Cliente extends Pessoa {
 		return getNome() + " - Agencia: " + agencia;
 	}
 	
-	public boolean transferencia(double quantia, Cliente destino) {
-		if (quantia > 0.0 && destino != null) {
+	public Transacao transferencia(double quantia, Cliente destino) {
+		
+		if (quantia > 0.0 && quantia <= saldo && destino != null) {
 			
-			Transacao t = new Transacao(this, destino, quantia, Transacao.Type.OUT);
-			Transacao t2 = new Transacao(destino, this, quantia, Transacao.Type.IN);
+			Transacao t = new Transacao(this, destino, quantia, LocalDate.now());	
 			
-			transacoes.add(t);
-			destino.transacoes.add(t2);
+			saldo -= quantia;
+			destino.saldo += quantia;
 			
-			return true;
+			return t;
 		} else {
-			return false;
-		}
-	}
-	
-	public boolean pagarFatura(double quantia) {
-	
-		if (saldo >= quantia && quantia > 0 && quantia <= fatura) {
-			fatura -= quantia;
 			
-			return true;
-		} else {
-			return false;
+			return null;
 		}
 	}
 	
@@ -138,7 +107,7 @@ public class Cliente extends Pessoa {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id);
+		return Objects.hash(conta);
 	}
 
 	@Override
@@ -150,8 +119,7 @@ public class Cliente extends Pessoa {
 		if (getClass() != obj.getClass())
 			return false;
 		Cliente other = (Cliente) obj;
-		return id == other.id;
+		return conta == other.conta;
 	}
-	
 	
 }
